@@ -15,6 +15,10 @@ function PRINT() { printf "%b\n" "${@}"; }
 function LOWERCASE() {
     printf "%b" "${1}" | tr "[:upper:]" "[:lower:]"
 }
+function FINDCMD() {
+    [[ -x "$(command -v ${1})" ]] && return 0
+    return 1
+}
 
 clear
 
@@ -37,10 +41,13 @@ PRINT "90. Flatpaks"
 PRINT "91. Homebrew"
 PRINT "92. Papirus Icons"
 PRINT "93. Zap (AppImage manager)"
+PRINT "94. Doas (sudo alternative)"
 PRINT
 PRINT "0. Exit"
 PRINT
 read -r -p "# > " scriptNumber
+
+clear
 
 case "$(LOWERCASE "${scriptNumber}")" in
 1 | fedora)
@@ -75,7 +82,29 @@ case "$(LOWERCASE "${scriptNumber}")" in
     }
 
     bash -c "$(wget -qO- "https://raw.githubusercontent.com/srevinsaju/zap/main/install.sh")"
+    ;;
 
+94 | doas)
+    FINDCMD "dnf" &&
+        sudo dnf install gcc gcc-c++ make flex bison pam-devel byacc
+
+    FINDCMD "apt" &&
+        sudo apt install build-essential make bison flex libpam0g-dev
+
+    FINDCMD "zypper" &&
+        sudo zypper install gcc gcc-c++ make flex bison pam-devel byacc git
+
+    mkdir ~/.local/share/com.github.rmj1001.Post-Installers.git-repos
+    cd ~/.local/share/com.github.rmj1001.Post-Installers.git-repos
+
+    git clone https://github.com/slicer69/doas.git
+    cd ./doas
+
+    make
+    sudo make install
+    sudo cp /etc/pam.d/sudo /etc/pam.d/doas
+    PRINT "Doas installed! Run 'sudo vidoas' to edit the config file."
+    PRINT "Make sure to type 'permit $USER as root'."
     ;;
 
 0 | exit)
