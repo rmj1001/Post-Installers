@@ -13,7 +13,7 @@
 
 function PRINT() { printf "%b\n" "${@}"; }
 function LOWERCASE() {
-    NPRINT "${1}" | tr "[:upper:]" "[:lower:]"
+    printf "%b" "${1}" | tr "[:upper:]" "[:lower:]"
 }
 
 clear
