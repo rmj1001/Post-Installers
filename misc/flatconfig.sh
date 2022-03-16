@@ -36,6 +36,7 @@ flatpak install --user --noninteractive --or-update flathub \
 	com.etlegacy.ETLegacy \
 	com.github.bleakgrey.tootle \
 	com.github.calo001.fondo \
+	com.github.gi_lom.dialect \
 	com.github.hugolabe.Wike \
 	com.github.maoschanz.drawing \
 	com.github.rafostar.Clapper \
@@ -44,18 +45,24 @@ flatpak install --user --noninteractive --or-update flathub \
 	com.gitlab.newsflash \
 	com.mattjakeman.ExtensionManager \
 	com.obsproject.Studio \
+	com.obsproject.Studio.Plugin.Gstreamer \
+	com.obsproject.Studio.Plugin.InputOverlay \
+	com.obsproject.Studio.Plugin.OBSVkCapture \
 	com.rafaelmardojai.Blanket \
 	com.skype.Client \
 	com.thebrokenrail.MCPIReborn \
 	com.usebottles.bottles \
 	com.vscodium.codium \
+	de.haeckerfelix.AudioSharing \
 	de.haeckerfelix.Fragments \
 	de.haeckerfelix.Shortwave \
-	dev.geopjr.Hashbrown \
+	dev.geopjr.Collision \
+	fr.free.Homebank \
 	fr.romainvigier.MetadataCleaner \
 	im.bernard.Nostalgia \
 	io.github.Soundux \
 	io.github.achetagames.epic_asset_manager \
+	io.github.lainsce.Quilter \
 	io.github.prateekmedia.appimagepool \
 	io.github.seadve.Kooha \
 	io.github.shiftey.Desktop \
@@ -79,6 +86,7 @@ flatpak install --user --noninteractive --or-update flathub \
 	org.gimp.GIMP.Plugin.Resynthesizer \
 	org.gnome.Aisleriot \
 	org.gnome.Boxes \
+	org.gnome.Boxes.Extension.OsinfoDb \
 	org.gnome.Builder \
 	org.gnome.Calculator \
 	org.gnome.Calls \
@@ -87,6 +95,7 @@ flatpak install --user --noninteractive --or-update flathub \
 	org.gnome.DejaDup \
 	org.gnome.Evince \
 	org.gnome.Extensions \
+	org.gnome.Extensions \
 	org.gnome.Fractal \
 	org.gnome.Lollypop \
 	org.gnome.Maps \
@@ -94,10 +103,10 @@ flatpak install --user --noninteractive --or-update flathub \
 	org.gnome.PasswordSafe \
 	org.gnome.Podcasts \
 	org.gnome.Polari \
-	org.gnome.Sdk \
-	org.gnome.Sdk \
 	org.gnome.TextEditor \
+	org.gnome.TextEditor.Devel \
 	org.gnome.World.PikaBackup \
+	org.gnome.World.Secrets \
 	org.gnome.design.IconLibrary \
 	org.gnome.eog \
 	org.gnome.gitlab.Cowsay \
@@ -116,6 +125,9 @@ flatpak install --user --noninteractive --or-update flathub \
 	org.signal.Signal \
 	org.turbowarp.TurboWarp \
 	org.videolan.VLC \
+	org.winehq.Wine.DLLs.dxvk \
+	org.winehq.Wine.gecko \
+	org.winehq.Wine.mono \
 	org.x.Warpinator \
 	org.xonotic.Xonotic \
 	re.sonny.Commit \
