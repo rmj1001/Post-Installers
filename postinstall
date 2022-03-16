@@ -1,0 +1,66 @@
+#!/usr/bin/env bash
+
+##############################################
+#   Author: RMCJ <rmichael1001@gmail.com>
+#   Project: com.github.rmj1001.Post-Installers
+#   Version: 1.0
+#
+#   Usage: postinstall
+#
+#   Description:
+#		Curlable Postinstallation Script
+##############################################
+
+function PRINT() { printf "%b\n" "${@}"; }
+function LOWERCASE() {
+    NPRINT "${1}" | tr "[:upper:]" "[:lower:]"
+}
+
+clear
+
+PRINT "Post Installation Helper"
+PRINT
+PRINT "Choose a Distro/App (number):"
+PRINT "1. Fedora"
+PRINT "2. Ubuntu"
+PRINT ""
+PRINT "90. Flatpaks"
+PRINT "91. Homebrew"
+PRINT "92. Papirus Icons"
+PRINT "93. Zap (AppImage manager)"
+PRINT
+PRINT "0. Exit"
+PRINT
+read -r -p "# > " scriptNumber
+
+case "$(LOWERCASE "${scriptNumber}")" in
+    1 | fedora )
+        
+        ;;
+    
+    2 | ubuntu )
+
+        ;;
+    
+    90 | flatpaks )
+
+        ;;
+    
+    91 | homebrew )
+
+        ;;
+    
+    92 | papirus icons )
+
+        ;;
+    
+    93 | zap )
+
+        ;;
+    
+    0 | exit )
+        PRINT "Exiting."
+        PRINT   
+        exit 0
+        ;;
+esac
