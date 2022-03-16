@@ -18,7 +18,16 @@ function LOWERCASE() {
 
 clear
 
-PRINT "Post Installation Helper"
+PRINT "
+ ######                         ###                                             #     #                                    
+ #     #  ####   ####  #####     #  #    #  ####  #####   ##   #      #         #     # ###### #      #####  ###### #####  
+ #     # #    # #        #       #  ##   # #        #    #  #  #      #         #     # #      #      #    # #      #    # 
+ ######  #    #  ####    #       #  # #  #  ####    #   #    # #      #         ####### #####  #      #    # #####  #    # 
+ #       #    #      #   #       #  #  # #      #   #   ###### #      #         #     # #      #      #####  #      #####  
+ #       #    # #    #   #       #  #   ## #    #   #   #    # #      #         #     # #      #      #      #      #   #  
+ #        ####   ####    #      ### #    #  ####    #   #    # ###### ######    #     # ###### ###### #      ###### #    # 
+"
+
 PRINT
 PRINT "Choose a Distro/App (number):"
 PRINT "1. Fedora"
@@ -35,39 +44,38 @@ read -r -p "# > " scriptNumber
 
 case "$(LOWERCASE "${scriptNumber}")" in
 1 | fedora)
-    wget -qO- \
-        "https://raw.githubusercontent.com/rmj1001/Post-Installers/main/distros/fedora.sh" |
-        bash -c
+    wget -qO- "https://raw.githubusercontent.com/rmj1001/Post-Installers/main/distros/fedora.sh" | bash
     ;;
 
 2 | ubuntu)
-    wget -qO- \
-        "https://raw.githubusercontent.com/rmj1001/Post-Installers/main/distros/ubuntu.sh" |
-        bash -c
+    wget -qO- "https://raw.githubusercontent.com/rmj1001/Post-Installers/main/distros/ubuntu.sh" | bash
     ;;
 
 90 | flatpaks)
-    wget -qO- \
-        "https://raw.githubusercontent.com/rmj1001/Post-Installers/main/misc/flatconfig.sh" |
-        bash -c
+    wget -qO- "https://raw.githubusercontent.com/rmj1001/Post-Installers/main/misc/flatconfig.sh" | bash
     ;;
 
 91 | homebrew)
-    wget -qO- \
-        "https://raw.githubusercontent.com/rmj1001/Post-Installers/main/misc/homebrew.sh" |
-        bash -c
+    wget -qO- "https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh" | bash
     ;;
 
 92 | 'papirus icons')
-    wget -qO- \
-        "https://raw.githubusercontent.com/rmj1001/Post-Installers/main/misc/papirus-icons.sh" |
-        bash -c
+    wget -qO- "https://git.io/papirus-icon-theme-install" | sh
+    wget -qO- "https://git.io/papirus-folders-install" | sh
+
+    papirus-folders --theme Papirus-Dark -C yaru
+    papirus-folders --theme Papirus-Light -C yaru
     ;;
 
 93 | zap)
-    wget -qO- \
-        "https://raw.githubusercontent.com/rmj1001/Post-Installers/main/misc/zap.sh" |
-        bash -c
+    # Zap Appimage PM (requires jq)
+    [[ -x "$(command -v jq)" ]] || {
+        PRINT "postinstall: 'jq' must be installed to install Zap."
+        exit 1
+    }
+
+    bash -c "$(wget -qO- "https://raw.githubusercontent.com/srevinsaju/zap/main/install.sh")"
+
     ;;
 
 0 | exit)

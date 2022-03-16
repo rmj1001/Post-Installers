@@ -11,6 +11,11 @@
 #		Install flatpak repositories and software
 ##############################################
 
+[[ -x "$(command -v flatpak)" ]] || {
+	printf "%b\n" "Flatpak is not installed. Exiting."
+	exit 1
+}
+
 flatpak remote-add --if-not-exists --user \
 	flathub https://flathub.org/repo/flathub.flatpakrepo
 
