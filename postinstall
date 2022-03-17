@@ -20,6 +20,9 @@ function FINDCMD() {
     return 1
 }
 
+INSTALLERS_DISTROS="https://raw.githubusercontent.com/rmj1001/Post-Installers/main/distros"
+INSTALLERS_MISC="https://raw.githubusercontent.com/rmj1001/Post-Installers/main/misc"
+
 clear
 
 PRINT "
@@ -51,15 +54,15 @@ clear
 
 case "$(LOWERCASE "${scriptNumber}")" in
 1 | fedora)
-    wget -qO- "https://raw.githubusercontent.com/rmj1001/Post-Installers/main/distros/fedora.sh" | bash
+    wget -qO- "${INSTALLERS_DISTROS}/fedora.sh" | bash
     ;;
 
 2 | ubuntu)
-    wget -qO- "https://raw.githubusercontent.com/rmj1001/Post-Installers/main/distros/ubuntu.sh" | bash
+    wget -qO- "${INSTALLERS_DISTROS}/ubuntu.sh" | bash
     ;;
 
 90 | flatpaks)
-    wget -qO- "https://raw.githubusercontent.com/rmj1001/Post-Installers/main/misc/flatconfig.sh" | bash
+    wget -qO- "${INSTALLERS_MISC}/flatconfig.sh" | bash
     ;;
 
 91 | homebrew)
@@ -76,7 +79,7 @@ case "$(LOWERCASE "${scriptNumber}")" in
 
 93 | zap)
     # Zap Appimage PM (requires jq)
-    [[ -x "$(command -v jq)" ]] || {
+    FINDCMD "jq" || {
         PRINT "postinstall: 'jq' must be installed to install Zap."
         exit 1
     }
@@ -85,6 +88,11 @@ case "$(LOWERCASE "${scriptNumber}")" in
     ;;
 
 94 | doas)
+    FINDCMD "dnf" || FINDCMD "apt" || FINDCMD "zypper" || {
+        PRINT "postinstall: 'doas' not supported for your distro."
+        exit 1
+    }
+
     FINDCMD "dnf" &&
         sudo dnf install gcc gcc-c++ make flex bison pam-devel byacc
 
