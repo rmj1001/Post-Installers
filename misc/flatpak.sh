@@ -12,8 +12,23 @@
 ##############################################
 
 [[ -x "$(command -v flatpak)" ]] || {
-	printf "%b\n" "Flatpak is not installed. Exiting."
-	exit 1
+	printf "%b\n" "Flatpak is not installed."
+
+	[[ -x "$(command -v apt)" ]] || [[ -x "$(command -v dnf)" ]] ||
+		{
+			printf "%b\n" "Aborting"
+			exit 1
+		}
+
+	[[ -x "$(command -v apt)" ]] && {
+		sudo apt install flatpak gnome-software-plugin-flatpak
+	}
+
+	[[ -x "$(command -v dnf)" ]] && {
+		sudo dnf install flatpak
+	}
+
+	printf "%b\n" "Installed Flatpak."
 }
 
 flatpak remote-add --if-not-exists --user \

@@ -11,18 +11,27 @@
 #		Curlable fedora post-install script
 ##############################################
 
-if [[ $EUID -eq 0 ]]; then
-
+[[ $EUID -eq 0 ]] && {
 	PROGRAM_NAME="$(basename "$0")"
 
 	printf '%b' "'${PROGRAM_NAME}' should not be run as root. "
 	printf '%b\n' "Please try again as a normal user."
 	exit 1
-fi
+}
 
 [[ -x "$(which dnf)" ]] || {
-	printf '%b\n' "This script must be run on Fedora." && exit 1
+	printf '%b\n' "This script must be run on Fedora."
+	exit 1
 }
+
+function ctrl_c() {
+	PRINT "\n"
+	[[ -z "${scriptNumber}" ]] && PRINT "Canceling."
+	PRINT
+	exit 0
+}
+
+trap ctrl_c INT
 
 ################################################################################
 # ENVIRONMENT VARIABLES
@@ -88,16 +97,6 @@ sudo rpm --import https://packages.microsoft.com/keys/microsoft.asc
 sudo sh -c 'echo -e "[code]\nname=Visual Studio Code\nbaseurl=https://packages.microsoft.com/yumrepos/vscode\nenabled=1\ngpgcheck=1\ngpgkey=https://packages.microsoft.com/keys/microsoft.asc" > /etc/yum.repos.d/vscode.repo'
 dnf check-update
 sudo dnf install code
-
-################################################################################
-# PORTABLE SOFTWARE
-#
-
-# Install flatpak apps
-bash <(curl -s ${HELPERS}/flatconfig.sh)
-
-# Install portable software
-bash <(curl -s ${HELPERS}/portableApps.sh)
 
 ################################################################################
 # MISCELLANEOUS CONFIGS

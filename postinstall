@@ -12,6 +12,10 @@
 ##############################################
 
 function PRINT() { printf "%b\n" "${@}"; }
+function LINES() {
+    for ((i = 0; i < COLUMNS; ++i)); do printf -; done
+    PRINT
+}
 function LOWERCASE() {
     printf "%b" "${1}" | tr "[:upper:]" "[:lower:]"
 }
@@ -19,6 +23,28 @@ function FINDCMD() {
     [[ -x "$(command -v ${1})" ]] && return 0
     return 1
 }
+
+function REQUIRECMD() {
+    local metRequirements=0
+
+    for cmd in "${@}"; do
+        FINDCMD "${cmd}" && continue
+        PRINT "Missing Dependency: ${cmd}"
+        metRequirements=1
+    done
+
+    [[ $metRequirements -eq 0 ]] && return 0
+    return 1
+}
+
+function ctrl_c() {
+    PRINT "\n"
+    [[ -z "${scriptNumber}" ]] && PRINT "Canceling."
+    PRINT
+    exit 0
+}
+
+trap ctrl_c INT
 
 INSTALLERS_DISTROS="https://raw.githubusercontent.com/rmj1001/Post-Installers/main/distros"
 INSTALLERS_MISC="https://raw.githubusercontent.com/rmj1001/Post-Installers/main/misc"
@@ -34,47 +60,57 @@ PRINT "
  #       #    # #    #   #       #  #   ## #    #   #   #    # #      #         #     # #      #      #      #      #   #  
  #        ####   ####    #      ### #    #  ####    #   #    # ###### ######    #     # ###### ###### #      ###### #    # 
 "
-
+LINES
 PRINT
-PRINT "Choose a Distro/App (number):"
-PRINT "1. Fedora"
-PRINT "2. Ubuntu"
+PRINT "Choose One (type the id number) and press ENTER:"
+PRINT "(Leave empty to cancel)"
+PRINT
+PRINT "-----------------------"
+PRINT "Distros"
+PRINT "-----------------------"
+PRINT "d1. Fedora"
+PRINT "d2. Ubuntu"
 PRINT ""
-PRINT "90. Flatpaks"
-PRINT "91. Homebrew"
-PRINT "92. Papirus Icons"
-PRINT "93. Zap (AppImage manager)"
-PRINT "94. Doas (sudo alternative)"
-PRINT "95. Tmpmail (Temporary email adress)"
+PRINT "-----------------------"
+PRINT "Miscellaneous Software"
+PRINT "-----------------------"
+PRINT "m1. Flatpaks"
+PRINT "m2. Homebrew"
+PRINT "m3. Papirus Icons"
+PRINT "m4. Zap (AppImage manager)"
+PRINT "m5. Doas (sudo alternative)"
+PRINT "m6. Tmpmail (Temporary email adress)"
 PRINT
-PRINT "0. Exit"
-PRINT
-read -r -p "# > " scriptNumber
+read -r -p "ID > " scriptNumber
 
-clear
+case "${scriptNumber}" in
 
-case "$(LOWERCASE "${scriptNumber}")" in
-1 | fedora)
+d1 | fedora)
+    LINES
     wget -qO- "${INSTALLERS_DISTROS}/fedora.sh" | bash
     exit 0
     ;;
 
-2 | ubuntu)
+d2 | ubuntu)
+    LINES
     wget -qO- "${INSTALLERS_DISTROS}/ubuntu.sh" | bash
     exit 0
     ;;
 
-90 | flatpaks)
-    wget -qO- "${INSTALLERS_MISC}/flatconfig.sh" | bash
+m1 | flatpaks)
+    LINES
+    wget -qO- "${INSTALLERS_MISC}/flatpak.sh" | bash
     exit 0
     ;;
 
-91 | homebrew)
+m2 | homebrew)
+    LINES
     wget -qO- "https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh" | bash
     exit 0
     ;;
 
-92 | 'papirus icons')
+m3 | 'papirus icons')
+    LINES
     wget -qO- "https://git.io/papirus-icon-theme-install" | sh
     wget -qO- "https://git.io/papirus-folders-install" | sh
 
@@ -83,10 +119,11 @@ case "$(LOWERCASE "${scriptNumber}")" in
     exit 0
     ;;
 
-93 | zap)
+m4 | zap)
+    LINES
     # Zap Appimage PM (requires jq)
-    FINDCMD "jq" || {
-        PRINT "postinstall: 'jq' must be installed to install Zap."
+    REQUIRE_CMD "jq" || {
+        PRINT "Aborting 'zap' install."
         exit 1
     }
 
@@ -94,7 +131,8 @@ case "$(LOWERCASE "${scriptNumber}")" in
     exit 0
     ;;
 
-94 | doas)
+m5 | doas)
+    LINES
     FINDCMD "dnf" || FINDCMD "apt" || FINDCMD "zypper" || {
         PRINT "postinstall: 'doas' not supported for your distro."
         exit 1
@@ -123,9 +161,10 @@ case "$(LOWERCASE "${scriptNumber}")" in
     exit 0
     ;;
 
-95 | tmpmail)
-    FINDCMD "w3m" && FINDCMD "jq" && FIND_CMD "curl" || {
-        PRINT "postinstall: Please install the following: w3m, jq, curl."
+m6 | tmpmail)
+    LINES
+    REQUIRECMD "w3m" "jq" "curl" || {
+        PRINT "Aborting 'tmpmail' install."
         exit 1
     }
 
@@ -139,8 +178,10 @@ case "$(LOWERCASE "${scriptNumber}")" in
     exit 0
     ;;
 
-0 | exit)
-    PRINT "Exiting."
+*)
+    PRINT
+    [[ -z "${scriptNumber}" ]] && PRINT "Canceling."
+    [[ -n "${scriptNumber}" ]] && PRINT "Invalid option '${scriptNumber}'. Aborting."
     PRINT
     exit 0
     ;;
