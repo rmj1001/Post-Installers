@@ -45,6 +45,7 @@ PRINT "91. Homebrew"
 PRINT "92. Papirus Icons"
 PRINT "93. Zap (AppImage manager)"
 PRINT "94. Doas (sudo alternative)"
+PRINT "95. Tmpmail (Temporary email adress)"
 PRINT
 PRINT "0. Exit"
 PRINT
@@ -55,18 +56,22 @@ clear
 case "$(LOWERCASE "${scriptNumber}")" in
 1 | fedora)
     wget -qO- "${INSTALLERS_DISTROS}/fedora.sh" | bash
+    exit 0
     ;;
 
 2 | ubuntu)
     wget -qO- "${INSTALLERS_DISTROS}/ubuntu.sh" | bash
+    exit 0
     ;;
 
 90 | flatpaks)
     wget -qO- "${INSTALLERS_MISC}/flatconfig.sh" | bash
+    exit 0
     ;;
 
 91 | homebrew)
     wget -qO- "https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh" | bash
+    exit 0
     ;;
 
 92 | 'papirus icons')
@@ -75,6 +80,7 @@ case "$(LOWERCASE "${scriptNumber}")" in
 
     papirus-folders --theme Papirus-Dark -C yaru
     papirus-folders --theme Papirus-Light -C yaru
+    exit 0
     ;;
 
 93 | zap)
@@ -85,6 +91,7 @@ case "$(LOWERCASE "${scriptNumber}")" in
     }
 
     bash -c "$(wget -qO- "https://raw.githubusercontent.com/srevinsaju/zap/main/install.sh")"
+    exit 0
     ;;
 
 94 | doas)
@@ -113,6 +120,23 @@ case "$(LOWERCASE "${scriptNumber}")" in
     sudo cp /etc/pam.d/sudo /etc/pam.d/doas
     PRINT "Doas installed! Run 'sudo vidoas' to edit the config file."
     PRINT "Make sure to type 'permit $USER as root'."
+    exit 0
+    ;;
+
+95 | tmpmail)
+    FINDCMD "w3m" && FINDCMD "jq" && FIND_CMD "curl" || {
+        PRINT "postinstall: Please install the following: w3m, jq, curl."
+        exit 1
+    }
+
+    # Download the tmpmail file and make it executable
+    curl -L "https://git.io/tmpmail" >tmpmail && chmod +x tmpmail
+
+    # Then move it somewhere in your $PATH. Here is an example:
+    sudo mv ./tmpmail /usr/bin
+
+    PRINT "postinstall: 'tmpmail' installed."
+    exit 0
     ;;
 
 0 | exit)
