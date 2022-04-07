@@ -5,27 +5,28 @@
 #   Project: Flatpak install helper
 #   Version: 1.0
 #
-#   Usage: flatconfig.sh
+#   Usage: flatpak.sh
 #
 #   Description:
 #		Install flatpak repositories and software
 ##############################################
 
-[[ -x "$(command -v flatpak)" ]] || {
+function CMD_EXISTS() {
+	[[ -x "$(command -v "${1}")" ]] && return 0
+	return 1
+}
+
+CMD_EXISTS "flatpak" || {
 	printf "%b\n" "Flatpak is not installed."
 
-	[[ -x "$(command -v apt)" ]] || [[ -x "$(command -v dnf)" ]] ||
-		{
-			printf "%b\n" "Aborting"
-			exit 1
-		}
-
-	[[ -x "$(command -v apt)" ]] && {
+	CMD_EXISTS "apt" && {
 		sudo apt install flatpak gnome-software-plugin-flatpak
-	}
-
-	[[ -x "$(command -v dnf)" ]] && {
+	} ||
+		CMD_EXISTS "dnf" && {
 		sudo dnf install flatpak
+	} || {
+		printf "%b\n" "Aborting"
+		exit 1
 	}
 
 	printf "%b\n" "Installed Flatpak."
