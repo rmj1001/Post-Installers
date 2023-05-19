@@ -22,5 +22,5 @@ Return [Home](../../README.md)
 Run the script below to use this program:
 
 ```bash
-wget -qO- "https://raw.githubusercontent.com/rmj1001/Post-Installers/main/postinstall" | bash -c
+bash <(wget -qO- "https://raw.githubusercontent.com/rmj1001/Post-Installers/main/postinstall")
 ```
