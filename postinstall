@@ -95,19 +95,19 @@ case "${scriptNumber}" in
 
 d1 | fedora)
     LINES
-    wget -qO- "${INSTALLERS_DISTROS}/fedora.sh" | bash
+    bash <(wget -qO- "${INSTALLERS_DISTROS}/fedora.sh")
     exit 0
     ;;
 
 d2 | ubuntu)
     LINES
-    wget -qO- "${INSTALLERS_DISTROS}/ubuntu.sh" | bash
+    bash <(wget -qO- "${INSTALLERS_DISTROS}/ubuntu.sh")
     exit 0
     ;;
 
 m1 | flatpaks)
     LINES
-    wget -qO- "${INSTALLERS_MISC}/flatpak.sh" | bash
+    bash <(wget -qO- "${INSTALLERS_MISC}/flatpak.sh")
     exit 0
     ;;
 
@@ -132,7 +132,7 @@ m4 | zap)
         exit 1
     }
 
-    bash -c "$(wget -qO- "https://raw.githubusercontent.com/srevinsaju/zap/main/install.sh")"
+    bash -s <(curl https://raw.githubusercontent.com/srevinsaju/zap/main/install.sh)
     exit 0
     ;;
 
