@@ -16,6 +16,13 @@ function LINES() {
     for ((i = 0; i < COLUMNS; ++i)); do printf -; done
     PRINT
 }
+# Description: Pauses script execution until the user presses ENTER
+# Usage:  PAUSE
+# Returns: int
+function PAUSE() {
+    NPRINT "Press <ENTER> to continue..."
+    read -r
+}
 function LOWERCASE() {
     printf "%b" "${1}" | tr "[:upper:]" "[:lower:]"
 }
@@ -106,17 +113,14 @@ m1 | flatpaks)
 
 m2 | homebrew)
     LINES
-    wget -qO- "https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh" | bash
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
     exit 0
     ;;
 
 m3 | 'papirus icons')
     LINES
-    wget -qO- "https://git.io/papirus-icon-theme-install" | sh
-    wget -qO- "https://git.io/papirus-folders-install" | sh
-
-    papirus-folders --theme Papirus-Dark -C yaru
-    papirus-folders --theme Papirus-Light -C yaru
+    cd /
+    wget -qO- https://git.io/papirus-icon-theme-install | sh
     exit 0
     ;;
 
