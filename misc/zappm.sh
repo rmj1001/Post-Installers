@@ -1,6 +1,6 @@
 # Zap Appimage PM (requires jq)
 REQUIRE_CMD "jq" || {
-    PRINT "Aborting 'zap' install. Dependency required: 'jq'."
+    printf "%b\n" "Aborting 'zap' install. Dependency required: 'jq'."
     exit 1
 }
 

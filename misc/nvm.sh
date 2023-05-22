@@ -15,6 +15,6 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"                   # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion" # This loads nvm bash_completion
 
-PRINT "export NVM_DIR=\"\$HOME/.nvm\"" >>${SHELLRC}
-PRINT "[ -s \"\$NVM_DIR/nvm.sh\" ] && \. \"\$NVM_DIR/nvm.sh\"" >>${SHELLRC}
-PRINT "[ -s \"\$NVM_DIR/bash_completion\" ] && \. \"\$NVM_DIR/bash_completion\"" >>${SHELLRC}
+printf "%b\n" "export NVM_DIR=\"\$HOME/.nvm\"" >>${SHELLRC}
+printf "%b\n" "[ -s \"\$NVM_DIR/nvm.sh\" ] && \. \"\$NVM_DIR/nvm.sh\"" >>${SHELLRC}
+printf "%b\n" "[ -s \"\$NVM_DIR/bash_completion\" ] && \. \"\$NVM_DIR/bash_completion\"" >>${SHELLRC}

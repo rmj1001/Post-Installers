@@ -4,10 +4,9 @@ function FINDCMD() {
     [[ -x "$(command -v ${1})" ]] && return 0
     return 1
 }
-function PRINT() { printf "%b\n" "${@}"; }
 
 FINDCMD "dnf" || FINDCMD "apt" || FINDCMD "zypper" || {
-    PRINT "postinstall: 'doas' not supported for your distro."
+    printf "%b\n" "postinstall: 'doas' not supported for your distro."
     exit 1
 }
 
@@ -29,5 +28,5 @@ cd ./doas
 make
 sudo make install
 sudo cp /etc/pam.d/sudo /etc/pam.d/doas
-PRINT "Doas installed! Run 'sudo vidoas' to edit the config file."
-PRINT "Make sure to type 'permit $USER as root'."
+printf "%b\n" "Doas installed! Run 'sudo vidoas' to edit the config file."
+printf "%b\n" "Make sure to type 'permit $USER as root'."
