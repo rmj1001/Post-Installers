@@ -91,19 +91,20 @@ trap ctrl_c INT
 exited=1
 
 LISTS="https://raw.githubusercontent.com/rmj1001/Post-Installers/main/misc/lists"
+LOCALLISTS="$(dirname "$0")/lists"
+
+function PROCESSFILE() {
+	wget -qO- "$1" | tr '\n' ' '
+}
 
 # Software lists
-allsoft=$(wget -qO- ${LISTS}/0-all-software.txt)
-echo "$allsoft"
-PAUSE
-
-accessories=$(cat ./lists/accessories.txt)
-development=$(cat ./lists/development.txt)
-devLibraries=$(cat ./lists/devLibraries.txt)
-gaming=$(cat ./lists/gaming.txt)
-multimedia=$(cat ./lists/multimedia.txt)
-socialmedia=$(cat ./lists/social-media.txt)
-utilities=$(cat ./lists/utilities.txt)
+allsoft=$(PROCESSFILE "${LISTS}/0-all-software.txt")
+accessories=$(PROCESSFILE "${LISTS}/accessories.txt")
+development=$(PROCESSFILE "${LISTS}/development.txt")
+devLibraries=$(PROCESSFILE "${LISTS}/devLibraries.txt")
+gaming=$(PROCESSFILE "${LISTS}/gaming.txt")
+multimedia=$(PROCESSFILE "${LISTS}/multimedia.txt")
+utilities=$(PROCESSFILE "${LISTS}/utilities.txt")
 
 while [[ $exited -eq 1 ]]; do
 	clear
