@@ -17,10 +17,24 @@ common configurations for various OSs.
 
 Return [Home](../../README.md)
 
-## Instructions
-
-Run the script below to use this program:
+## Post-install master script
 
 ```bash
 bash <(wget -qO- "https://raw.githubusercontent.com/rmj1001/Post-Installers/main/postinstall")
 ```
+
+## Individual Distribution Post-install Scripts
+
+To install the software you want, copy the code for the related category.
+
+| Script Name | Code                                                                                                   |
+| ----------- | ------------------------------------------------------------------------------------------------------ |
+| Fedora      | `bash <(wget -qO- "https://raw.githubusercontent.com/rmj1001/Post-Installers/main/distros/fedora.sh")` |
+| Ubuntu      | `bash <(wget -qO- "https://raw.githubusercontent.com/rmj1001/Post-Installers/main/distros/ubuntu.sh")` |
+
+## Individual Miscellaneous Scripts
+
+| Script Name | Code                                                                                                 |
+| ----------- | ---------------------------------------------------------------------------------------------------- |
+| Flatpak     | `bash <(wget -qO- "https://raw.githubusercontent.com/rmj1001/Post-Installers/main/misc/flatpak.sh")` |
+| PyEnv       | `bash <(wget -qO- "https://raw.githubusercontent.com/rmj1001/Post-Installers/main/misc/pyenv.sh")`   |
