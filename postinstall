@@ -113,98 +113,37 @@ m1 | flatpaks)
 
 m2 | homebrew)
     LINES
-    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    bash <(wget -qO- "${INSTALLERS_MISC}/homebrew.sh")
     exit 0
     ;;
 
 m3 | 'papirus icons')
     LINES
-    cd /
-    wget -qO- https://git.io/papirus-icon-theme-install | sh
+    bash <(wget -qO- "${INSTALLERS_MISC}/papirus.sh")
     exit 0
     ;;
 
 m4 | zap)
     LINES
-    # Zap Appimage PM (requires jq)
-    REQUIRE_CMD "jq" || {
-        PRINT "Aborting 'zap' install."
-        exit 1
-    }
-
-    bash -s <(curl https://raw.githubusercontent.com/srevinsaju/zap/main/install.sh)
+    bash <(wget -qO- "${INSTALLERS_MISC}/zappm.sh")
     exit 0
     ;;
 
 m5 | doas)
     LINES
-    FINDCMD "dnf" || FINDCMD "apt" || FINDCMD "zypper" || {
-        PRINT "postinstall: 'doas' not supported for your distro."
-        exit 1
-    }
-
-    FINDCMD "dnf" &&
-        sudo dnf install gcc gcc-c++ make flex bison pam-devel byacc
-
-    FINDCMD "apt" &&
-        sudo apt install build-essential make bison flex libpam0g-dev
-
-    FINDCMD "zypper" &&
-        sudo zypper install gcc gcc-c++ make flex bison pam-devel byacc git
-
-    mkdir ~/.local/share/com.github.rmj1001.Post-Installers.git-repos
-    cd ~/.local/share/com.github.rmj1001.Post-Installers.git-repos
-
-    git clone https://github.com/slicer69/doas.git
-    cd ./doas
-
-    make
-    sudo make install
-    sudo cp /etc/pam.d/sudo /etc/pam.d/doas
-    PRINT "Doas installed! Run 'sudo vidoas' to edit the config file."
-    PRINT "Make sure to type 'permit $USER as root'."
+    bash <(wget -qO- "${INSTALLERS_MISC}/doas.sh")
     exit 0
     ;;
 
 m6 | tmpmail)
     LINES
-    REQUIRECMD "w3m" "jq" "curl" || {
-        PRINT "Aborting 'tmpmail' install."
-        exit 1
-    }
-
-    # Download the tmpmail file and make it executable
-    curl -L "https://git.io/tmpmail" >tmpmail && chmod +x tmpmail
-
-    # Then move it somewhere in your $PATH. Here is an example:
-    sudo mv ./tmpmail /usr/bin
-
-    PRINT "postinstall: 'tmpmail' installed."
+    bash <(wget -qO- "${INSTALLERS_MISC}/tmpmail.sh")
     exit 0
     ;;
 
 m7 | nvm)
     LINES
-
-    export NVM_DIR="$HOME/.nvm" && (
-        git clone https://github.com/nvm-sh/nvm.git "$NVM_DIR"
-        cd "$NVM_DIR"
-        git checkout $(git describe --abbrev=0 --tags --match "v[0-9]*" $(git rev-list --tags --max-count=1))
-    ) && \. "$NVM_DIR/nvm.sh"
-
-    read -r -p "Add nvm source to your shellrc? y/N" addSrc
-    [[ -z "${addsrc}" || ! "${addsrc}" =~ [yY][eE]?[sS]? ]] && exit 0
-
-    SHELLRC="${HOME}/.${SHELL//\/bin\//}rc"
-
-    export NVM_DIR="$HOME/.nvm"
-    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"                   # This loads nvm
-    [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion" # This loads nvm bash_completion
-
-    PRINT "export NVM_DIR=\"\$HOME/.nvm\"" >>${SHELLRC}
-    PRINT "[ -s \"\$NVM_DIR/nvm.sh\" ] && \. \"\$NVM_DIR/nvm.sh\"" >>${SHELLRC}
-    PRINT "[ -s \"\$NVM_DIR/bash_completion\" ] && \. \"\$NVM_DIR/bash_completion\"" >>${SHELLRC}
-
+    bash <(wget -qO- "${INSTALLERS_MISC}/nvm.sh")
     exit 0
     ;;
 
