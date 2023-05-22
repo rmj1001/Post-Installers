@@ -17,6 +17,8 @@ common configurations for various Linux operating systems.
 
 ## Post-install master script
 
+**WARNING: PLEASE USE THE INDIVIDUAL SCRIPTS FOR NOW. THE MASTER SCRIPT IS CURRENTLY BORKED.**
+
 ```bash
 bash <(wget -qO- "https://raw.githubusercontent.com/rmj1001/Post-Installers/main/postinstall")
 ```
