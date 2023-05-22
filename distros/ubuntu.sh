@@ -25,9 +25,9 @@
 }
 
 function ctrl_c() {
-	PRINT "\n"
-	[[ -z "${scriptNumber}" ]] && PRINT "Canceling."
-	PRINT
+	printf "%b\n" "\n"
+	[[ -z "${scriptNumber}" ]] && printf "%b\n" "Canceling."
+	printf "%b\n"
 	exit 0
 }
 
