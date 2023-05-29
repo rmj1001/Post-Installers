@@ -19,7 +19,9 @@ common configurations for various Linux operating systems.
 
 Run the following command in your terminal to manage and install software for your new distro install.
 
-```bash <(wget -qO- "https://raw.githubusercontent.com/rmj1001/Post-Installers/main/distromgr")```
+```bash
+bash <(wget -qO- "https://raw.githubusercontent.com/rmj1001/Post-Installers/main/distromgr")
+```
 
 ## Individual Miscellaneous Scripts
 
