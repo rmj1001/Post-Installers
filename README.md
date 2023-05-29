@@ -15,22 +15,11 @@
 The scripts in this directory install common software, repositories, and apply
 common configurations for various Linux operating systems.
 
-## Post-install master script
+## Distro Manager
 
-**WARNING: PLEASE USE THE INDIVIDUAL SCRIPTS FOR NOW. THE MASTER SCRIPT IS CURRENTLY BORKED.**
+Run the following command in your terminal to manage and install software for your new distro install.
 
-```bash
-bash <(wget -qO- "https://raw.githubusercontent.com/rmj1001/Post-Installers/main/postinstall")
-```
-
-## Individual Distribution Post-install Scripts
-
-To install the software you want, copy the code and paste it into your terminal.
-
-| Script Name | Code                                                                                                       |
-| ----------- | ---------------------------------------------------------------------------------------------------------- |
-| Fedora      | ```bash <(wget -qO- "https://raw.githubusercontent.com/rmj1001/Post-Installers/main/distros/fedora.sh")``` |
-| Ubuntu      | ```bash <(wget -qO- "https://raw.githubusercontent.com/rmj1001/Post-Installers/main/distros/ubuntu.sh")``` |
+```bash <(wget -qO- "https://raw.githubusercontent.com/rmj1001/Post-Installers/main/distromgr")```
 
 ## Individual Miscellaneous Scripts
 
