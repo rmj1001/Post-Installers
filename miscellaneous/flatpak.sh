@@ -52,7 +52,7 @@ function LOWERCASE() {
 
 # Checks to see if a passed argument string matches any
 # existing Flatpak repositories installed locally
-function checkRepo() {
+function CHECK_REPO() {
 	shopt -s lastpipe
 
 	local repo
@@ -76,15 +76,15 @@ function FLATINSTALL() {
 	flatpak install --noninteractive --or-update flathub "$@"
 }
 
-# Trap a SIGINT (ctrl_c) event to clear the screen.
-function ctrl_c() {
+# Trap a SIGINT (CTRL_C) event to clear the screen.
+function CTRL_C() {
 	PRINT "\nCancelling..."
 	PAUSE
 	clear
 	exit 0
 }
 
-trap ctrl_c INT
+trap CTRL_C INT
 
 exited=1
 
@@ -306,7 +306,7 @@ ______ _       _               _
 	r1 | flathub)
 		LINES
 
-		checkRepo "flathub" && continue
+		CHECK_REPO "flathub" && continue
 
 		flatpak remote-add --if-not-exists \
 			flathub https://flathub.org/repo/flathub.flatpakrepo
@@ -318,7 +318,7 @@ ______ _       _               _
 	r2 | elementaryos)
 		LINES
 
-		checkRepo "elementaryio" && continue
+		CHECK_REPO "elementaryio" && continue
 
 		flatpak remote-add --if-not-exists \
 			flatpak remote-add --if-not-exists \
@@ -329,7 +329,7 @@ ______ _       _               _
 		;;
 	s0 | 'all software')
 		LINES
-		checkRepo "flathub" || continue
+		CHECK_REPO "flathub" || continue
 
 		FLATINSTALL "${allSoftware[@]}"
 
@@ -338,7 +338,7 @@ ______ _       _               _
 		;;
 	s1 | accessories)
 		LINES
-		checkRepo "flathub" || continue
+		CHECK_REPO "flathub" || continue
 
 		FLATINSTALL "${accessories[@]}"
 
@@ -347,7 +347,7 @@ ______ _       _               _
 		;;
 	s2 | 'developer tools')
 		LINES
-		checkRepo "flathub" || continue
+		CHECK_REPO "flathub" || continue
 
 		FLATINSTALL "${development[@]}"
 
@@ -356,7 +356,7 @@ ______ _       _               _
 		;;
 	s3 | 'developer libraries')
 		LINES
-		checkRepo "flathub" || continue
+		CHECK_REPO "flathub" || continue
 
 		FLATINSTALL "${developerLibraries[@]}"
 
@@ -365,7 +365,7 @@ ______ _       _               _
 		;;
 	s4 | gaming)
 		LINES
-		checkRepo "flathub" || continue
+		CHECK_REPO "flathub" || continue
 
 		FLATINSTALL "${gaming[@]}"
 
@@ -374,7 +374,7 @@ ______ _       _               _
 		;;
 	s5 | multimedia)
 		LINES
-		checkRepo "flathub" || continue
+		CHECK_REPO "flathub" || continue
 
 		FLATINSTALL "${multimedia[@]}"
 
@@ -383,7 +383,7 @@ ______ _       _               _
 		;;
 	s6 | 'social media')
 		LINES
-		checkRepo "flathub" || continue
+		CHECK_REPO "flathub" || continue
 
 		FLATINSTALL "${socialMedia[@]}"
 
@@ -392,7 +392,7 @@ ______ _       _               _
 		;;
 	s7 | utilities)
 		LINES
-		checkRepo "flathub" || continue
+		CHECK_REPO "flathub" || continue
 
 		FLATINSTALL "${utilities[@]}"
 
