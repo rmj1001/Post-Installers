@@ -15,24 +15,24 @@
 #                                 API/Functions                                #
 ################################################################################
 
-function CMD_EXISTS()
-{
+# Check to see if a command exists in the $PATH
+function CMD_EXISTS() {
 	[[ -x "$(command -v "${1}")" ]] && return 0
 	return 1
 }
 
-function PRINT()
-{
-  printf "%b\n" "${@}"
+# Print text with a newline to STDOUT
+function PRINT() {
+	printf "%b\n" "${@}"
 }
 
-function NPRINT()
-{
-  printf "%b" "${@}"
+# Print text without a newline to STDOUT
+function NPRINT() {
+	printf "%b" "${@}"
 }
 
-function LINES()
-{
+# Print a line of "-" to the terminal as long as a full horizontal line
+function LINES() {
 	for ((i = 0; i < COLUMNS; ++i)); do printf -; done
 	PRINT
 }
@@ -40,70 +40,44 @@ function LINES()
 # Description: Pauses script execution until the user presses ENTER
 # Usage:  PAUSE
 # Returns: int
-function PAUSE()
-{
-	local pause
-	read -r -p "Press <ENTER> to continue..." pause
+function PAUSE() {
+	read -r -p "Press <ENTER> to continue..."
 	return 0
 }
 
-function LOWERCASE()
-{
+# Convert a string to all lowercase letters for processing strings
+function LOWERCASE() {
 	printf "%b" "${1}" | tr "[:upper:]" "[:lower:]"
 }
 
-# Return 0 if repo exists, 1 if it doesn't exist
-# $1 is the repository id
-# $2 is the message to print if the repository exists
-function checkRepository()
-{
-	local repoInstalled=1
+# Checks to see if a passed argument string matches any
+# existing Flatpak repositories installed locally
+function checkRepo() {
+	shopt -s lastpipe
 
-	flatpak remotes --columns=name | while read name; do
-		if [[ $name == "$1" ]]; then
-			repoInstalled=0
-			break
-		fi
+	local repo
+	repo="${1}"
+
+	flatpak remotes --columns=name | while read -r name; do
+		[[ "${name}" == "${repo}" ]] && {
+			PRINT "Repository '${repo}' is installed".
+			PAUSE
+			return 0
+		}
 	done
 
-	return $repoInstalled
-}
-
-function checkFlathub()
-{
-	local msg="Flathub exists."
-	[[ -n "$1" ]] && msg="$1"
-
-	if [[ $(checkRepository "flathub") -eq 0 ]]; then
-		PRINT "${msg}"
-		PAUSE
-		return 0
-	fi
-
+	PRINT "Repository '${repo}' is not installed."
+	PAUSE
 	return 1
 }
 
-function checkElementary()
-{
-	local msg="ElementaryOS repository exists."
-	[[ -n "$1" ]] && msg="$1"
-
-	if [[ $(checkRepository "elementaryio") -eq 0 ]]; then
-		PRINT "${msg}"
-		PAUSE
-		return 0
-	fi
-
-	return 1
-}
-
-function FLATINSTALL()
-{
+# Shorthand for installing system-level Flatpak packages
+function FLATINSTALL() {
 	flatpak install --noninteractive --or-update flathub "$@"
 }
 
-function ctrl_c()
-{
+# Trap a SIGINT (ctrl_c) event to clear the screen.
+function ctrl_c() {
 	PRINT "\nCancelling..."
 	PAUSE
 	clear
@@ -118,131 +92,131 @@ exited=1
 #                                Software lists                                #
 ################################################################################
 accessories=(
-com.belmoussaoui.Authenticator 
-com.belmoussaoui.Obfuscate 
-com.bitwarden.desktop 
-com.github.calo001.fondo 
-com.github.hugolabe.Wike 
-com.github.maoschanz.drawing 
-com.github.rafostar.Clapper 
-com.gitlab.newsflash 
-com.rafaelmardojai.Blanket 
-de.haeckerfelix.Shortwave 
-fr.free.Homebank 
-im.bernard.Nostalgia 
-io.github.lainsce.Quilter 
-io.github.prateekmedia.appimagepool 
-io.github.seadve.Kooha 
-io.github.shiftey.Desktop 
-it.mijorus.smile 
-org.gabmus.giara 
-org.gnome.Aisleriot 
-org.gnome.Calculator 
-org.gnome.Calls 
-org.gnome.Evince 
-org.gnome.Fractal 
-org.gnome.Lollypop 
-org.gnome.Maps 
-org.gnome.Podcasts 
-org.gnome.Polari 
-org.gnome.World.PikaBackup 
-org.gnome.World.Secrets 
-org.gnome.eog 
-org.gnome.gitlab.Cowsay 
-org.gnome.gitlab.somas.Apostrophe 
-org.gnome.gitlab.somas.Apostrophe.Plugin.TexLive 
-org.gnome.seahorse.Application 
-org.gnucash.GnuCash 
-org.gustavoperedo.FontDownloader 
-org.libreoffice.LibreOffice 
-org.mozilla.firefox 
-org.onlyoffice.desktopeditors 
-org.turbowarp.TurboWarp 
-org.videolan.VLC 
-org.x.Warpinator 
-re.sonny.Junction 
-re.sonny.Tangram
+	com.belmoussaoui.Authenticator
+	com.belmoussaoui.Obfuscate
+	com.bitwarden.desktop
+	com.github.calo001.fondo
+	com.github.hugolabe.Wike
+	com.github.maoschanz.drawing
+	com.github.rafostar.Clapper
+	com.gitlab.newsflash
+	com.rafaelmardojai.Blanket
+	de.haeckerfelix.Shortwave
+	fr.free.Homebank
+	im.bernard.Nostalgia
+	io.github.lainsce.Quilter
+	io.github.prateekmedia.appimagepool
+	io.github.seadve.Kooha
+	io.github.shiftey.Desktop
+	it.mijorus.smile
+	org.gabmus.giara
+	org.gnome.Aisleriot
+	org.gnome.Calculator
+	org.gnome.Calls
+	org.gnome.Evince
+	org.gnome.Fractal
+	org.gnome.Lollypop
+	org.gnome.Maps
+	org.gnome.Podcasts
+	org.gnome.Polari
+	org.gnome.World.PikaBackup
+	org.gnome.World.Secrets
+	org.gnome.eog
+	org.gnome.gitlab.Cowsay
+	org.gnome.gitlab.somas.Apostrophe
+	org.gnome.gitlab.somas.Apostrophe.Plugin.TexLive
+	org.gnome.seahorse.Application
+	org.gnucash.GnuCash
+	org.gustavoperedo.FontDownloader
+	org.libreoffice.LibreOffice
+	org.mozilla.firefox
+	org.onlyoffice.desktopeditors
+	org.turbowarp.TurboWarp
+	org.videolan.VLC
+	org.x.Warpinator
+	re.sonny.Junction
+	re.sonny.Tangram
 )
 
 development=(
-ar.xjuan.Cambalache
-com.axosoft.GitKraken
-com.vscodium.codium
-dev.geopjr.Collision
-org.gnome.Builder
-re.sonny.Commit
+	ar.xjuan.Cambalache
+	com.axosoft.GitKraken
+	com.vscodium.codium
+	dev.geopjr.Collision
+	org.gnome.Builder
+	re.sonny.Commit
 )
 
 developerLibraries=(
-org.freedesktop.Sdk 
-org.freedesktop.Sdk.Extension.dotnet 
-org.freedesktop.Sdk.Extension.golang 
-org.freedesktop.Sdk.Extension.haskell 
-org.freedesktop.Sdk.Extension.mono6 
-org.freedesktop.Sdk.Extension.node16 
-org.freedesktop.Sdk.Extension.openjdk 
-org.freedesktop.Sdk.Extension.php74 
-org.freedesktop.Sdk.Extension.rust-stable
+	org.freedesktop.Sdk
+	org.freedesktop.Sdk.Extension.dotnet
+	org.freedesktop.Sdk.Extension.golang
+	org.freedesktop.Sdk.Extension.haskell
+	org.freedesktop.Sdk.Extension.mono6
+	org.freedesktop.Sdk.Extension.node16
+	org.freedesktop.Sdk.Extension.openjdk
+	org.freedesktop.Sdk.Extension.php74
+	org.freedesktop.Sdk.Extension.rust-stable
 )
 
 gaming=(
-com.etlegacy.ETLegacy
-com.thebrokenrail.MCPIReborn
-io.github.achetagames.epic_asset_manager
-net.veloren.veloren
-org.gnome.Chess
-org.gnome.Mines
-org.xonotic.Xonotic
+	com.etlegacy.ETLegacy
+	com.thebrokenrail.MCPIReborn
+	io.github.achetagames.epic_asset_manager
+	net.veloren.veloren
+	org.gnome.Chess
+	org.gnome.Mines
+	org.xonotic.Xonotic
 )
 
 multimedia=(
-com.github.wwmm.easyeffects
-com.obsproject.Studio
-com.obsproject.Studio.Plugin.Gstreamer
-com.obsproject.Studio.Plugin.InputOverlay
-com.obsproject.Studio.Plugin.OBSVkCapture
-de.haeckerfelix.AudioSharing
-de.haeckerfelix.Fragments
-io.github.Soundux
-nl.hjdskes.gcolor3
-org.audacityteam.Audacity
-org.gimp.GIMP
-org.gimp.GIMP.Manual
-org.gimp.GIMP.Plugin.Resynthesizer
-org.gnome.design.IconLibrary
-org.gnome.gitlab.YaLTeR.VideoTrimmer
-org.inkscape.Inkscape
-org.kde.kdenlive
-org.kde.krita
+	com.github.wwmm.easyeffects
+	com.obsproject.Studio
+	com.obsproject.Studio.Plugin.Gstreamer
+	com.obsproject.Studio.Plugin.InputOverlay
+	com.obsproject.Studio.Plugin.OBSVkCapture
+	de.haeckerfelix.AudioSharing
+	de.haeckerfelix.Fragments
+	io.github.Soundux
+	nl.hjdskes.gcolor3
+	org.audacityteam.Audacity
+	org.gimp.GIMP
+	org.gimp.GIMP.Manual
+	org.gimp.GIMP.Plugin.Resynthesizer
+	org.gnome.design.IconLibrary
+	org.gnome.gitlab.YaLTeR.VideoTrimmer
+	org.inkscape.Inkscape
+	org.kde.kdenlive
+	org.kde.krita
 )
 
 socialMedia=(
-com.discordapp.Discord
-com.github.bleakgrey.tootle
-com.skype.Client
-network.loki.Session
-org.signal.Signal
-us.zoom.Zoom
+	com.discordapp.Discord
+	com.github.bleakgrey.tootle
+	com.skype.Client
+	network.loki.Session
+	org.signal.Signal
+	us.zoom.Zoom
 )
 
 utilities=(
-ca.desrt.dconf-editor
-com.github.tchx84.Flatseal
-com.mattjakeman.ExtensionManager
-com.usebottles.bottles
-fr.romainvigier.MetadataCleaner
-org.gnome.Boxes
-org.gnome.Boxes.Extension.OsinfoDb
-org.gnome.Connections
-org.gnome.DejaDup
-org.winehq.Wine.DLLs.dxvk
-org.winehq.Wine.gecko
-org.winehq.Wine.mono
+	ca.desrt.dconf-editor
+	com.github.tchx84.Flatseal
+	com.mattjakeman.ExtensionManager
+	com.usebottles.bottles
+	fr.romainvigier.MetadataCleaner
+	org.gnome.Boxes
+	org.gnome.Boxes.Extension.OsinfoDb
+	org.gnome.Connections
+	org.gnome.DejaDup
+	org.winehq.Wine.DLLs.dxvk
+	org.winehq.Wine.gecko
+	org.winehq.Wine.mono
 )
 
 allSoftware=(
-  "${accessories[@]}" "${development[@]}" "${developerLibraries[@]}" 
-  "${gaming[@]}" "${multimedia[@]}" "${socialMedia[@]}" "${utilities[@]}"
+	"${accessories[@]}" "${development[@]}" "${developerLibraries[@]}"
+	"${gaming[@]}" "${multimedia[@]}" "${socialMedia[@]}" "${utilities[@]}"
 )
 
 ################################################################################
@@ -299,27 +273,27 @@ ______ _       _               _
 	m1 | 'install flatpak')
 		LINES
 		CMD_EXISTS "flatpak" && {
-		  PRINT "Flatpak already exists."
-		  PAUSE
+			PRINT "Flatpak already exists."
+			PAUSE
 			continue
 		}
-		
+
 		CMD_EXISTS "apt" && {
 			sudo apt install flatpak gnome-software-plugin-flatpak
-		  PRINT "Installed Flatpak."
-		  PAUSE
+			PRINT "Installed Flatpak."
+			PAUSE
 			continue
-			}
-			
+		}
+
 		CMD_EXISTS "dnf" && {
 			sudo dnf install flatpak
-		  PRINT "Installed Flatpak."
-		  PAUSE
+			PRINT "Installed Flatpak."
+			PAUSE
 			continue
-			}
-			
-			PRINT "Unsupported distro. Please use Ubuntu or Debian. Aborting..."
-			exit 1
+		}
+
+		PRINT "Unsupported distro. Please use Ubuntu or Debian. Aborting..."
+		exit 1
 		;;
 
 	m2 | 'repair user')
@@ -332,9 +306,9 @@ ______ _       _               _
 	r1 | flathub)
 		LINES
 
-		checkFlathub && continue
+		checkRepo "flathub" && continue
 
-		flatpak remote-add --if-not-exists  \
+		flatpak remote-add --if-not-exists \
 			flathub https://flathub.org/repo/flathub.flatpakrepo
 
 		PAUSE
@@ -344,10 +318,10 @@ ______ _       _               _
 	r2 | elementaryos)
 		LINES
 
-		checkElementary && continue
+		checkRepo "elementaryio" && continue
 
-		flatpak remote-add --if-not-exists  \
-			flatpak remote-add --if-not-exists  \
+		flatpak remote-add --if-not-exists \
+			flatpak remote-add --if-not-exists \
 			elementaryio https://flatpak.elementary.io/repo.flatpakrepo
 
 		PAUSE
@@ -355,10 +329,7 @@ ______ _       _               _
 		;;
 	s0 | 'all software')
 		LINES
-		checkFlathub || {
-			PRINT "Flathub isn't installed. Cancelling..."
-			continue
-		}
+		checkRepo "flathub" || continue
 
 		FLATINSTALL "${allSoftware[@]}"
 
@@ -367,84 +338,63 @@ ______ _       _               _
 		;;
 	s1 | accessories)
 		LINES
-		checkFlathub || {
-			PRINT "Flathub isn't installed. Cancelling..."
-			continue
-		}
+		checkRepo "flathub" || continue
 
-		FLATINSTALL ${accessories[@]}
+		FLATINSTALL "${accessories[@]}"
 
 		PAUSE
 		continue
 		;;
 	s2 | 'developer tools')
 		LINES
-		checkFlathub || {
-			PRINT "Flathub isn't installed. Cancelling..."
-			continue
-		}
+		checkRepo "flathub" || continue
 
-		FLATINSTALL ${development[@]}
+		FLATINSTALL "${development[@]}"
 
 		PAUSE
 		continue
 		;;
 	s3 | 'developer libraries')
 		LINES
-		checkFlathub || {
-			PRINT "Flathub isn't installed. Cancelling..."
-			continue
-		}
+		checkRepo "flathub" || continue
 
-		FLATINSTALL ${developerLibraries[@]}
+		FLATINSTALL "${developerLibraries[@]}"
 
 		PAUSE
 		continue
 		;;
 	s4 | gaming)
 		LINES
-		checkFlathub || {
-			PRINT "Flathub isn't installed. Cancelling..."
-			continue
-		}
+		checkRepo "flathub" || continue
 
-		FLATINSTALL ${gaming[@]}
+		FLATINSTALL "${gaming[@]}"
 
 		PAUSE
 		continue
 		;;
 	s5 | multimedia)
 		LINES
-		checkFlathub || {
-			PRINT "Flathub isn't installed. Cancelling..."
-			continue
-		}
+		checkRepo "flathub" || continue
 
-		FLATINSTALL ${multimedia[@]}
+		FLATINSTALL "${multimedia[@]}"
 
 		PAUSE
 		continue
 		;;
 	s6 | 'social media')
 		LINES
-		checkFlathub || {
-			PRINT "Flathub isn't installed. Cancelling..."
-			continue
-		}
+		checkRepo "flathub" || continue
 
-		FLATINSTALL ${socialMedia[@]}
+		FLATINSTALL "${socialMedia[@]}"
 
 		PAUSE
 		continue
 		;;
 	s7 | utilities)
 		LINES
-		checkFlathub || {
-			PRINT "Flathub isn't installed. Cancelling..."
-			continue
-		}
+		checkRepo "flathub" || continue
 
-		FLATINSTALL ${utilities[@]}
+		FLATINSTALL "${utilities[@]}"
 
 		PAUSE
 		continue
@@ -459,8 +409,8 @@ ______ _       _               _
 		LINES
 		PRINT
 		[[ -z "${option}" ]] && PRINT "Canceling."
-		[[ -n "${option}" ]] && \
-		  PRINT "Invalid option '${option}'. Aborting."
+		[[ -n "${option}" ]] &&
+			PRINT "Invalid option '${option}'. Aborting."
 		PRINT
 		PAUSE
 		continue
