@@ -17,10 +17,19 @@ common configurations for various Linux operating systems.
 
 To install the software you want, copy the code and paste it into your terminal.
 
-## Distro Manager Scripts
+## Table of Contents
 
-To use distro-specific scripts, [click here.](./distros/README.md)
+1. [Fedora](#fedora)
+2. [Ubuntu](#ubuntu)
 
-## Miscellaneous Software
+## Fedora
 
-To use distro-agnostic scripts for miscellaneous software, [click here.](./miscellaneous/README.md)
+```bash
+bash <(wget -qO- "https://raw.githubusercontent.com/rmj1001/Post-Installers/main/distros/fedora.sh")
+```
+
+## Ubuntu
+
+```bash
+bash <(wget -qO- "https://raw.githubusercontent.com/rmj1001/Post-Installers/main/distros/ubuntu.sh")
+```
