@@ -21,6 +21,7 @@ To install the software you want, copy the code and paste it into your terminal.
 
 - [Post-installation Scripts](#post-installation-scripts)
   - [Table of Contents](#table-of-contents)
+  - [Heckershell](#heckershell)
   - [Doas](#doas)
   - [Flatpak](#flatpak)
   - [Homebrew](#homebrew)
@@ -29,6 +30,14 @@ To install the software you want, copy the code and paste it into your terminal.
   - [Papirus](#papirus)
   - [TmpMail](#tmpmail)
   - [ZapPm](#zappm)
+
+## Heckershell
+
+A bash/zsh framework for plugins and configurations.
+
+```bash
+bash <(wget -qO- https://raw.githubusercontent.com/rmj1001/HeckerShell/main/auto/install.sh)
+```
 
 ## Doas
 
