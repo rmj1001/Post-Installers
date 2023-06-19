@@ -15,32 +15,48 @@
 #                                 API/Functions                                #
 ################################################################################
 
-function CMD_EXISTS() {
+function CMD_EXISTS()
+{
 	[[ -x "$(command -v "${1}")" ]] && return 0
 	return 1
 }
-function PRINT() { printf "%b\n" "${@}"; }
-function NPRINT() { printf "%b" "${@}"; }
-function LINES() {
+
+function PRINT()
+{
+  printf "%b\n" "${@}"
+}
+
+function NPRINT()
+{
+  printf "%b" "${@}"
+}
+
+function LINES()
+{
 	for ((i = 0; i < COLUMNS; ++i)); do printf -; done
 	PRINT
 }
+
 # Description: Pauses script execution until the user presses ENTER
 # Usage:  PAUSE
 # Returns: int
-function PAUSE() {
+function PAUSE()
+{
 	local pause
 	read -r -p "Press <ENTER> to continue..." pause
 	return 0
 }
-function LOWERCASE() {
+
+function LOWERCASE()
+{
 	printf "%b" "${1}" | tr "[:upper:]" "[:lower:]"
 }
 
 # Return 0 if repo exists, 1 if it doesn't exist
 # $1 is the repository id
 # $2 is the message to print if the repository exists
-function checkRepository() {
+function checkRepository()
+{
 	local repoInstalled=1
 
 	flatpak remotes --columns=name | while read name; do
@@ -53,7 +69,8 @@ function checkRepository() {
 	return $repoInstalled
 }
 
-function checkFlathub() {
+function checkFlathub()
+{
 	local msg="Flathub exists."
 	[[ -n "$1" ]] && msg="$1"
 
@@ -66,7 +83,8 @@ function checkFlathub() {
 	return 1
 }
 
-function checkElementary() {
+function checkElementary()
+{
 	local msg="ElementaryOS repository exists."
 	[[ -n "$1" ]] && msg="$1"
 
@@ -79,11 +97,13 @@ function checkElementary() {
 	return 1
 }
 
-function FLATINSTALL() {
+function FLATINSTALL()
+{
 	flatpak install --noninteractive --or-update flathub "$@"
 }
 
-function ctrl_c() {
+function ctrl_c()
+{
 	PRINT "\nCancelling..."
 	PAUSE
 	clear
@@ -316,6 +336,7 @@ ______ _       _               _
 
 		flatpak remote-add --if-not-exists  \
 			flathub https://flathub.org/repo/flathub.flatpakrepo
+
 		PAUSE
 		continue
 		;;
@@ -328,6 +349,7 @@ ______ _       _               _
 		flatpak remote-add --if-not-exists  \
 			flatpak remote-add --if-not-exists  \
 			elementaryio https://flatpak.elementary.io/repo.flatpakrepo
+
 		PAUSE
 		continue
 		;;
