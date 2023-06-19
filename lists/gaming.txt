@@ -1,7 +1,0 @@
-com.etlegacy.ETLegacy
-com.thebrokenrail.MCPIReborn
-io.github.achetagames.epic_asset_manager
-net.veloren.veloren
-org.gnome.Chess
-org.gnome.Mines
-org.xonotic.Xonotic

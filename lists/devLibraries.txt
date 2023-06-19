@@ -1,9 +1,0 @@
-org.freedesktop.Sdk 
-org.freedesktop.Sdk.Extension.dotnet 
-org.freedesktop.Sdk.Extension.golang 
-org.freedesktop.Sdk.Extension.haskell 
-org.freedesktop.Sdk.Extension.mono6 
-org.freedesktop.Sdk.Extension.node16 
-org.freedesktop.Sdk.Extension.openjdk 
-org.freedesktop.Sdk.Extension.php74 
-org.freedesktop.Sdk.Extension.rust-stable

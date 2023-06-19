@@ -1,6 +1,0 @@
-ar.xjuan.Cambalache
-com.axosoft.GitKraken
-com.vscodium.codium
-dev.geopjr.Collision
-org.gnome.Builder
-re.sonny.Commit

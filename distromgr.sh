@@ -5,7 +5,7 @@
 #   Project: com.github.rmj1001.Post-Installers
 #   Version: 1.0
 #
-#   Usage: postinstall
+#   Usage: distromgr.sh
 #
 #   Description:
 #		Curlable Postinstallation Script
@@ -46,7 +46,7 @@ function REQUIRECMD() {
 
 function ctrl_c() {
     PRINT "\n"
-    [[ -z "${scriptNumber}" ]] && PRINT "Canceling.\n"
+    [[ -z "${option}" ]] && PRINT "Canceling.\n"
     clear
     exit 0
 }
@@ -64,9 +64,6 @@ UBUNTU() {
 }
 
 trap ctrl_c INT
-
-INSTALLERS_DISTROS="https://raw.githubusercontent.com/rmj1001/Post-Installers/main/distros"
-INSTALLERS_MISC="https://raw.githubusercontent.com/rmj1001/Post-Installers/main/misc"
 
 function choose_distro() {
     clear
@@ -87,9 +84,9 @@ function choose_distro() {
     PRINT "Fedora"
     PRINT "Ubuntu"
     PRINT
-    read -r -p "ID > " scriptNumber
+    read -r -p "ID > " option
 
-    case "$(LOWERCASE ${scriptNumber})" in
+    case "$(LOWERCASE ${option})" in
 
     d1 | fedora)
         DISTRO="FEDORA"
@@ -103,8 +100,8 @@ function choose_distro() {
 
     *)
         PRINT
-        [[ -z "${scriptNumber}" ]] && PRINT "Canceling."
-        [[ -n "${scriptNumber}" ]] && PRINT "Invalid option '${scriptNumber}'. Aborting."
+        [[ -z "${option}" ]] && PRINT "Canceling."
+        [[ -n "${option}" ]] && PRINT "Invalid option '${option}'. Aborting."
         PRINT
         exit 0
         ;;
@@ -127,45 +124,55 @@ function manage_distro() {
         PRINT "-----------------------"
         PRINT
         PRINT "0. Switch Distro (Current Distro: \"${DISTRO}\")"
-        PRINT "1. Install Repositories (RECOMMENDED)"
-        PRINT "2. Enable Cronie"
-        PRINT "3. Update System"
+        PRINT "1. Fix DNF (fedora only)"
+        PRINT "2. Install Repositories (RECOMMENDED)"
+        PRINT "3. Enable Cronie"
+        PRINT "4. Update System"
         PRINT ""
         PRINT "-----------------------"
         PRINT " Install software"
         PRINT "-----------------------"
         PRINT
-        PRINT "4. Developer Tools"
-        PRINT "5. Multimedia"
-        PRINT "6. Gaming"
-        PRINT "7. Ubuntu Snaps"
-        PRINT "8. Microsoft Edge"
-        PRINT "9. VS Code"
-        PRINT "10. Miscellaneous"
+        PRINT "5. Developer Tools"
+        PRINT "6. Multimedia"
+        PRINT "7. Gaming"
+        PRINT "8. Ubuntu Snaps"
+        PRINT "9. Microsoft Edge"
+        PRINT "10. VS Code"
+        PRINT "11. Miscellaneous"
         PRINT
         PRINT "99. Exit"
         PRINT
         LINES
         PRINT "Type in the ID of the action, then press ENTER."
-        read -r -p "ID > " scriptNumber
+        read -r -p "ID > " option
         LINES
 
-        case "$(LOWERCASE ${scriptNumber})" in
+        case "$(LOWERCASE ${option})" in
 
         0 | 'switch distro')
             choose_distro
             ;;
+            
+        1 | 'fix dnf')
+            FEDORA && {
+              clear
+                
+              # Configure DNF
+              printf '%b\n' "[main]" | sudo tee /etc/dnf/dnf.conf
+              printf '%b\n' "fastestmirror=True" | sudo tee -a /etc/dnf/dnf.conf
+              printf '%b\n' "max_parallel_downloads=20" | sudo tee -a /etc/dnf/dnf.conf
+              printf '%b\n' "deltarpm=False" | sudo tee -a /etc/dnf/dnf.conf
+              printf '%b\n' "defaultyes=True" | sudo tee -a /etc/dnf/dnf.conf
+            }
+            
+            PAUSE
+            continue
+            ;;
 
-        1 | 'install repositories')
+        2 | 'install repositories')
             FEDORA && {
                 clear
-
-                # Configure DNF
-                printf '%b\n' "[main]" | sudo tee /etc/dnf/dnf.conf
-                printf '%b\n' "fastestmirror=True" | sudo tee -a /etc/dnf/dnf.conf
-                printf '%b\n' "max_parallel_downloads=20" | sudo tee -a /etc/dnf/dnf.conf
-                printf '%b\n' "deltarpm=False" | sudo tee -a /etc/dnf/dnf.conf
-                printf '%b\n' "defaultyes=True" | sudo tee -a /etc/dnf/dnf.conf
 
                 # RPM Fusion
                 sudo dnf install \
@@ -195,7 +202,7 @@ function manage_distro() {
             continue
             ;;
 
-        2 | 'enable cronie')
+        3 | 'enable cronie')
             FEDORA && {
                 sudo dnf install cronie
             }
@@ -209,30 +216,13 @@ function manage_distro() {
             PAUSE
             continue
             ;;
-        3 | update | 'update system')
+        4 | update | 'update system')
             FEDORA && {
                 sudo dnf update
             }
 
             UBUNTU && {
                 sudo apt update && sudo apt upgrade
-            }
-
-            PAUSE
-            continue
-            ;;
-        4 | 'multimedia')
-            FEDORA && {
-                sudo dnf groupupdate multimedia --setop="install_weak_deps=False" \
-                    --exclude=PackageKit-gstreamer-plugin
-
-                sudo dnf groupupdate sound-and-video
-                sudo dnf install rpmfusion-free-release-tainted
-                sudo dnf install libdvdcss
-            }
-
-            UBUNTU && {
-                sudo apt install ubuntu-restricted-extras
             }
 
             PAUSE
@@ -260,8 +250,26 @@ function manage_distro() {
             PAUSE
             continue
             ;;
+          
+        6 | 'multimedia')
+            FEDORA && {
+                sudo dnf groupupdate multimedia --setop="install_weak_deps=False" \
+                    --exclude=PackageKit-gstreamer-plugin
 
-        6 | gaming)
+                sudo dnf groupupdate sound-and-video
+                sudo dnf install rpmfusion-free-release-tainted
+                sudo dnf install libdvdcss
+            }
+
+            UBUNTU && {
+                sudo apt install ubuntu-restricted-extras
+            }
+
+            PAUSE
+            continue
+            ;;
+
+        7 | gaming)
             FEDORA && {
                 sudo dnf install lutris
             }
@@ -272,7 +280,7 @@ function manage_distro() {
             PAUSE
             continue
             ;;
-        7 | 'ubuntu snaps')
+        8 | 'ubuntu snaps')
             [[ -e /var/lib/snapd/snap ]] && {
                 PRINT "Snap is already installed."
 
@@ -292,7 +300,7 @@ function manage_distro() {
             PAUSE
             continue
             ;;
-        8 | 'microsoft edge')
+        9 | 'microsoft edge')
             FEDORA && {
                 sudo rpm --import https://packages.microsoft.com/keys/microsoft.asc
                 sudo dnf config-manager --add-repo https://packages.microsoft.com/yumrepos/edge
@@ -310,7 +318,7 @@ function manage_distro() {
             PAUSE
             continue
             ;;
-        9 | 'vs code')
+        10 | 'vs code')
             [[ -n "$(command -v code)" ]] && {
                 PRINT "VS Code is already installed"
 
@@ -319,35 +327,37 @@ function manage_distro() {
             }
 
             FEDORA && {
-                # VS Code
-                sudo rpm --import https://packages.microsoft.com/keys/microsoft.asc
-                sudo sh -c 'echo -e "[code]\nname=Visual Studio Code\nbaseurl=https://packages.microsoft.com/yumrepos/vscode\nenabled=1\ngpgcheck=1\ngpgkey=https://packages.microsoft.com/keys/microsoft.asc" > /etc/yum.repos.d/vscode.repo'
-                dnf check-update
-                sudo dnf install code
+              # VS Code
+              sudo rpm --import https://packages.microsoft.com/keys/microsoft.asc
+              sudo sh -c 'echo -e "[code]\nname=Visual Studio Code\nbaseurl=https://packages.microsoft.com/yumrepos/vscode\nenabled=1\ngpgcheck=1\ngpgkey=https://packages.microsoft.com/keys/microsoft.asc" > /etc/yum.repos.d/vscode.repo'
+              dnf check-update
+              sudo dnf install code
             }
 
             UBUNTU && {
-                sudo apt-get install wget gpg
-                wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor >packages.microsoft.gpg
-                sudo install -D -o root -g root -m 644 packages.microsoft.gpg /etc/apt/keyrings/packages.microsoft.gpg
-                sudo sh -c 'echo "deb [arch=amd64,arm64,armhf signed-by=/etc/apt/keyrings/packages.microsoft.gpg] https://packages.microsoft.com/repos/code stable main" > /etc/apt/sources.list.d/vscode.list'
-                rm -f packages.microsoft.gpg
-                sudo apt install apt-transport-https
-                sudo apt update
-                sudo apt install code
+              sudo apt-get install wget gpg
+              wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor >packages.microsoft.gpg
+              sudo install -D -o root -g root -m 644 packages.microsoft.gpg /etc/apt/keyrings/packages.microsoft.gpg
+              sudo sh -c 'echo "deb [arch=amd64,arm64,armhf signed-by=/etc/apt/keyrings/packages.microsoft.gpg] https://packages.microsoft.com/repos/code stable main" > /etc/apt/sources.list.d/vscode.list'
+              rm -f packages.microsoft.gpg
+              sudo apt install apt-transport-https
+              sudo apt update
+              sudo apt install code
             }
 
             PAUSE
             continue
             ;;
 
-        10 | miscellaneous)
+        11 | miscellaneous)
+          # TODO: Use arrays and loops to allow users to choose which software
+          # to install
             FEDORA && {
-                sudo dnf install xclip micro jq
+              sudo dnf install xclip micro jq
             }
 
             UBUNTU && {
-                PRINT "There is no miscellaneous software to install for Ubuntu."
+              PRINT "There is no miscellaneous software to install for Ubuntu."
             }
 
             PAUSE
@@ -359,8 +369,8 @@ function manage_distro() {
             ;;
         *)
             PRINT
-            [[ -z "${scriptNumber}" ]] && PRINT "You must choose an option."
-            [[ -n "${scriptNumber}" ]] && PRINT "Invalid option '${scriptNumber}'."
+            [[ -z "${option}" ]] && PRINT "You must choose an option."
+            [[ -n "${option}" ]] && PRINT "Invalid option '${option}'."
             PRINT
 
             PAUSE

@@ -1,6 +1,0 @@
-com.discordapp.Discord
-com.github.bleakgrey.tootle
-com.skype.Client
-network.loki.Session
-org.signal.Signal
-us.zoom.Zoom

@@ -35,16 +35,16 @@ CMD_EXISTS "apt" && {
 }
 
 CMD_EXISTS "dnf" && {
-    dnf install make gcc zlib-devel bzip2 bzip2-devel readline-devel sqlite sqlite-devel openssl-devel tk-devel libffi-devel xz-devel
+    sudo dnf install make gcc zlib-devel bzip2 bzip2-devel readline-devel sqlite sqlite-devel openssl-devel tk-devel libffi-devel xz-devel
 }
 
 CMD_EXISTS "zypper" && {
-    zypper install gcc automake bzip2 libbz2-devel xz xz-devel openssl-devel ncurses-devel \
+    sudo zypper install gcc automake bzip2 libbz2-devel xz xz-devel openssl-devel ncurses-devel \
         readline-devel zlib-devel tk-devel libffi-devel sqlite3-devel
 }
 
 CMD_EXISTS "pacman" && {
-    pacman -S --needed base-devel openssl zlib xz
+    sudo pacman -S --needed base-devel openssl zlib xz
 }
 
 CMD_EXISTS "eopkg" && {
@@ -53,11 +53,11 @@ CMD_EXISTS "eopkg" && {
 }
 
 CMD_EXISTS "apk" && {
-    apk add --no-cache git bash build-base libffi-dev openssl-dev bzip2-dev zlib-dev readline-dev sqlite-dev
+    sudo apk add --no-cache git bash build-base libffi-dev openssl-dev bzip2-dev zlib-dev readline-dev sqlite-dev
 }
 
 CMD_EXISTS "xbps-install" && {
-    xbps-install base-devel bzip2-devel openssl openssl-devel readline readline-devel sqlite-devel xz zlib zlib-devel
+    sudo xbps-install base-devel bzip2-devel openssl openssl-devel readline readline-devel sqlite-devel xz zlib zlib-devel
 }
 
 ##############################################
